@@ -1,4 +1,6 @@
-import 'package:achieval_project/views/splash_view.dart';
+import 'package:achieval_project/views/dashboad_view.dart';
+import 'package:achieval_project/views/search_projects_view.dart';
+import 'package:achieval_project/views/sign_in_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,8 +24,6 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Student Project Work")),
-    );
+    return SignInView();
   }
 }
