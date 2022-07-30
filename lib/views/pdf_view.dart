@@ -2,12 +2,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+
 import 'package:pdf_render/pdf_render_widgets.dart';
 
 class PdfView extends StatelessWidget {
   const PdfView({Key? key}) : super(key: key);
-
   Future<File?> filePicker() async {
     File? file;
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -22,23 +21,23 @@ class PdfView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: ElevatedButton(
-        onPressed: () async {
-          File? _final = await filePicker();
-          print(_final!.path);
-
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => View(file: _final)));
-        },
-        child: Text('choose'),
-      )),
-    );
+        body: Center(
+            child: ElevatedButton(
+                child: Text("show pdf"),
+                onPressed: () async {
+                  File? file = await filePicker();
+                  // print(file);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => View(file: file!)));
+                  print(file);
+                })));
   }
 }
 
 class View extends StatefulWidget {
-  final File file;
+  final File? file;
   const View({Key? key, required this.file}) : super(key: key);
 
   @override
@@ -46,36 +45,24 @@ class View extends StatefulWidget {
 }
 
 class _ViewState extends State<View> {
-  //  final Completer<PDFViewController> _controller =  Completer<PDFViewController>();
-  int? pages = 0;
-  int? currentPage = 0;
-  bool isReady = false;
-  String errorMessage = '';
+  PdfViewerController? controller;
+  TapDownDetails? _doubleTapDetails;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: PDFView(
-        filePath: widget.file.path,
-        enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageFling: false,
-        onRender: (_pages) {
-          setState(() {
-            pages = _pages;
-            isReady = true;
-          });
-        },
-        onError: (error) {
-          print(error.toString());
-        },
-        onPageError: (page, error) {
-          print('$page: ${error.toString()}');
-        },
-        onViewCreated: (PDFViewController pdfViewController) {
-          // _controller.complete(pdfViewController);
-        },
-      ),
-    );
+    return Scaffold(
+        appBar: AppBar(
+            title: Text(
+          "${widget.file!.path.split('/').last}",
+          style: TextStyle(fontSize: 10),
+        )),
+        body: Center(
+          child: PdfViewer.openFile(
+            widget.file!.path,
+            viewerController: controller,
+            params: PdfViewerParams(
+              padding: 10,
+            ),
+          ),
+        ));
   }
 }
