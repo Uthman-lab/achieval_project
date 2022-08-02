@@ -49,3 +49,4 @@ app.*.map.json
 
 # ignore all files except lib folder
 !/lib/*
+*.vscode/
