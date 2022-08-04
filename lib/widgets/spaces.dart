@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MySpace extends StatelessWidget {
-  final height;
+  final double height;
   const MySpace(this.height);
 
   @override
