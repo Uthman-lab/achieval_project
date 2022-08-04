@@ -1,3 +1,4 @@
+import 'package:achieval_project/views/add_project.dart';
 import 'package:achieval_project/views/search_projects_view.dart';
 import 'package:achieval_project/widgets/buttons.dart';
 import 'package:achieval_project/widgets/spaces.dart';
@@ -16,6 +17,10 @@ class MyDashBoad extends StatelessWidget {
           children: [
             MyTextButton(
               label: "Add Project",
+              onpressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddView()));
+              },
             ),
             MySpace(30.0),
             MyTextButton(

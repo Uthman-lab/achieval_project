@@ -1,6 +1,8 @@
 import 'package:achieval_project/widgets/search_box.dart';
 import 'package:flutter/material.dart';
 
+import '../models/project_work_model.dart';
+
 class SearchView extends StatelessWidget {
   const SearchView({Key? key}) : super(key: key);
 
@@ -18,7 +20,7 @@ class SearchView extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                children: cards(10),
+                children: cards(),
               ),
             )
           ],
@@ -28,12 +30,20 @@ class SearchView extends StatelessWidget {
   }
 }
 
-List<Widget> cards(length) {
+List<Widget> cards() {
+  var source = Projects.projects;
   return List.generate(
-      length,
+      source.length,
       (index) => Card(
             child: ListTile(
-              title: Text("project ${index} title "),
+              title: Text(" ${source[index].title}  "),
+              subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("${source[index].author}"),
+                    Text("date created :${source[index].date}"),
+                    Text("supervisor : ${source[index].supervisor}"),
+                  ]),
               leading: CircleAvatar(),
             ),
           ));

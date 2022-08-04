@@ -12,3 +12,18 @@ class MyTextFormField extends StatelessWidget {
     );
   }
 }
+
+class MyTextField extends StatelessWidget {
+  const MyTextField({Key? key, required this.controller, required this.label})
+      : super(key: key);
+  final TextEditingController controller;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(label: Text(label)),
+    );
+  }
+}
