@@ -13,6 +13,14 @@ class Project {
       this.supervisor = "unKnown",
       required this.date,
       required this.file});
+
+  static fromJson(Map<String, dynamic> data) {
+    return Project(
+        title: data["title"],
+        author: data["author"],
+        date: data['date'],
+        file: File(""));
+  }
 }
 
 class Projects {

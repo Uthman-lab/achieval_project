@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+
+import '../models/project_work_model.dart';
 
 class ProjectController extends ChangeNotifier {
   String? _title;
@@ -9,6 +12,20 @@ class ProjectController extends ChangeNotifier {
   String? _supervisor;
   late DateTime _date = DateTime.now();
   File? _file;
+  List<Map> _docs = [];
+  List<Map> _searchList = [];
+
+  List<Map> get docs => _docs;
+  List<Map> get searchList => _docs;
+  set docs(List<Map> newDocs) {
+    _docs = newDocs;
+    notifyListeners();
+  }
+
+  set searchList(List<Map> newList) {
+    _searchList = newList;
+    notifyListeners();
+  }
 
   String get title => this._title!;
   String get author => this._author!;
@@ -18,6 +35,7 @@ class ProjectController extends ChangeNotifier {
 
   set title(String newTitle) {
     _title = newTitle;
+    notifyListeners();
   }
 
   set author(newAuthor) {
@@ -34,5 +52,23 @@ class ProjectController extends ChangeNotifier {
 
   set file(newFile) {
     _file = newFile;
+  }
+
+  Stream<List<Map<String, dynamic>>> readProjects() {
+    var projects = FirebaseFirestore.instance
+        .collection("project")
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+
+    return projects;
+  }
+
+  void addToFirebase(Project project) async {
+    await FirebaseFirestore.instance.collection("project").doc().set({
+      "title": project.title,
+      "author": project.author,
+      "supervisor": project.supervisor,
+      "date": project.date
+    });
   }
 }

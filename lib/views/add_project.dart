@@ -42,8 +42,10 @@ class AddView extends StatelessWidget {
                 var obj = Project(
                     title: titleController.text,
                     author: authorController.text,
+                    supervisor: supervisorController.text,
                     date: projectObj.date,
                     file: projectObj.file);
+                projectObj.addToFirebase(obj);
                 Projects.projects.add(obj);
                 Projects.projects.forEach((element) {
                   print("${element.author}, ${element.date}");
@@ -115,6 +117,8 @@ class _PdfState extends State<Pdf> {
           File? a = await obj.filePicker();
           if (a != null) {
             projectObj.file = a;
+            print(a.toString());
+            print(a.path);
             setState(() {
               fileName = a.path.split('/').last;
             });
