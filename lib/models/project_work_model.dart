@@ -5,7 +5,7 @@ class Project {
   final String author;
   final String supervisor;
   final DateTime date;
-  final File file;
+  final String file;
 
   Project(
       {required this.title,
@@ -19,7 +19,7 @@ class Project {
         title: data["title"],
         author: data["author"],
         date: data['date'],
-        file: File(""));
+        file: "");
   }
 }
 

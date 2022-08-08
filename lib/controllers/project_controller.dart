@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -61,6 +62,33 @@ class ProjectController extends ChangeNotifier {
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
 
     return projects;
+  }
+
+  Future uploadFile(File file) async {
+    String? link;
+    try {
+      final ref =
+          FirebaseStorage.instance.ref("files/${file.path.split("/").last}");
+      final storedFile = await ref.putFile(file);
+    } catch (e) {
+      print(e);
+    }
+
+    return link ?? "empty";
+  }
+
+  Future getFile() async {
+    final fileName = file.path.split("/").last;
+    final upFile =
+        await FirebaseStorage.instance.ref("files/$fileName").getDownloadURL();
+    print(upFile);
+  }
+
+  Future getMetaData() async {
+    final fileName = file.path.split("/").last;
+    final upFile =
+        await FirebaseStorage.instance.ref("files/$fileName").getMetadata();
+    print(upFile.name);
   }
 
   void addToFirebase(Project project) async {

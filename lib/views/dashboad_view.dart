@@ -11,29 +11,56 @@ class MyDashBoad extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Dashboard")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MyTextButton(
-              label: "Add Project",
-              onpressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddView()));
-              },
-            ),
-            MySpace(30.0),
-            MyTextButton(
-              label: "View Projects",
-              onpressed: () {
-                print("object");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SearchView()));
-              },
-            )
-          ],
-        ),
+      body: ListView(
+        // shrinkWrap: true,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              MyElevatedButton(
+                label: "Add Project",
+                onpressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddView()));
+                },
+              ),
+              MySpace(30.0),
+              MyElevatedButton(
+                label: "View Projects",
+                onpressed: () {
+                  print("object");
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SearchView()));
+                },
+              ),
+            ],
+          ),
+          MyGridView()
+        ],
       ),
     );
+  }
+}
+
+class MyGridView extends StatelessWidget {
+  const MyGridView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView(
+      gridDelegate:
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: cards(10),
+    );
+  }
+
+  List<Widget> cards(num) {
+    return List.generate(
+        num,
+        (index) => Card(
+              child: Text('title $index'),
+            ));
   }
 }

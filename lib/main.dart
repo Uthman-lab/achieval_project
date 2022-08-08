@@ -1,3 +1,4 @@
+import 'package:achieval_project/controllers/verification.dart';
 import 'package:achieval_project/views/add_project.dart';
 import 'package:achieval_project/views/dashboad_view.dart';
 import 'package:achieval_project/views/search_projects_view.dart';
@@ -22,7 +23,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ProjectController>(
-            create: (context) => ProjectController())
+            create: (context) => ProjectController()),
+        ChangeNotifierProvider<Verification>(
+            create: (context) => Verification())
       ],
       child: Home(),
     );
