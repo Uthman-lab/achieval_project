@@ -55,12 +55,6 @@ class AddView extends StatelessWidget {
               },
             ),
             MyTextButton(
-              label: "view all",
-              onpressed: () {
-                projectObj.viewFiles();
-              },
-            ),
-            MyTextButton(
               label: "view file",
               onpressed: () {
                 projectObj.getFile();

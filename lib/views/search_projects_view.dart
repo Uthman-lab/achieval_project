@@ -38,7 +38,9 @@ class _SearchViewState extends State<SearchView> {
                   a.listen((event) {
                     projectController.searchList = event
                       ..retainWhere((element) =>
-                          element.values.contains(searchController.text));
+                          element.containsValue(searchController.text));
+                    print(projectController.searchList);
+                    // print(projectController.searchList);
                   });
                 },
               ),

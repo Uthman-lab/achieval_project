@@ -17,7 +17,7 @@ class ProjectController extends ChangeNotifier {
   List<Map> _searchList = [];
 
   List<Map> get docs => _docs;
-  List<Map> get searchList => _docs;
+  List<Map> get searchList => _searchList;
   set docs(List<Map> newDocs) {
     _docs = newDocs;
     notifyListeners();
@@ -60,6 +60,7 @@ class ProjectController extends ChangeNotifier {
         .collection("project")
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+    //print(projects);
 
     return projects;
   }
