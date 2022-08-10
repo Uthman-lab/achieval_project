@@ -5,21 +5,22 @@ class Project {
   final String author;
   final String supervisor;
   final DateTime date;
-  final String file;
+  final String filePath;
 
   Project(
       {required this.title,
       required this.author,
       this.supervisor = "unKnown",
       required this.date,
-      required this.file});
+      required this.filePath});
 
   static fromJson(Map<String, dynamic> data) {
     return Project(
         title: data["title"],
         author: data["author"],
         date: data['date'],
-        file: "");
+        supervisor: data['supervisor'],
+        filePath: data["filePath"]);
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:achieval_project/controllers/verification.dart';
 import 'package:achieval_project/views/add_project.dart';
 import 'package:achieval_project/views/dashboad_view.dart';
+import 'package:achieval_project/views/pdf_view.dart';
 import 'package:achieval_project/views/search_projects_view.dart';
 import 'package:achieval_project/views/sign_in_view.dart';
 import 'package:firebase_core/firebase_core.dart';

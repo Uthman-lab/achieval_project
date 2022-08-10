@@ -39,27 +39,19 @@ class AddView extends StatelessWidget {
             MyTextButton(
               label: "save",
               onpressed: () async {
-                final downloadLink =
-                    await projectObj.uploadFile(projectObj.file);
+                final path = await projectObj.uploadFile(
+                    projectObj.file, authorController.text);
                 var obj = Project(
                     title: titleController.text,
                     author: authorController.text,
                     supervisor: supervisorController.text,
                     date: projectObj.date,
-                    file: downloadLink);
+                    filePath: path);
                 projectObj.addToFirebase(obj);
                 Projects.projects.add(obj);
-                Projects.projects.forEach((element) {
-                  print("${element.author}, ${element.date}");
-                });
+                Projects.projects.forEach((element) {});
               },
             ),
-            MyTextButton(
-              label: "view file",
-              onpressed: () {
-                projectObj.getFile();
-              },
-            )
           ],
         ),
       ),

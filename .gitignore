@@ -46,8 +46,11 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+
 # Ignore everything except the lib file
 !/lib/*
 /.vscode/
 /linux/
 /macos/
+
+

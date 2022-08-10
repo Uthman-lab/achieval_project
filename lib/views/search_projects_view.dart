@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:achieval_project/views/pdf_view.dart';
 import 'package:achieval_project/widgets/search_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,7 @@ class _SearchViewState extends State<SearchView> {
                       ..retainWhere((element) =>
                           element.containsValue(searchController.text));
                     print(projectController.searchList);
+
                     // print(projectController.searchList);
                   });
                 },
@@ -49,7 +51,7 @@ class _SearchViewState extends State<SearchView> {
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                children: cards(projectController.searchList),
+                children: cards(projectController.searchList, context),
               ),
             )
           ],
@@ -59,20 +61,37 @@ class _SearchViewState extends State<SearchView> {
   }
 }
 
-List<Widget> cards(List<Map> source) {
+List<Widget> cards(List<Map> source, context) {
+  var projectController = Provider.of<ProjectController>(context);
   return List.generate(
-      source.length,
-      (index) => Card(
-            child: ListTile(
-              title: Text(" ${source[index]['title']}  "),
-              subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("${source[index]['author']}"),
-                    Text("date created :${source[index]['date']}"),
-                    Text("supervisor : ${source[index]['supervisor']}"),
-                  ]),
-              leading: CircleAvatar(),
-            ),
-          ));
+    source.length,
+    (index) => GestureDetector(
+        child: Card(
+          child: ListTile(
+            title: Text(" ${source[index]['title']}  "),
+            subtitle:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text("${source[index]['author']}"),
+              Text("date created :${source[index]['date']}"),
+              Text("supervisor : ${source[index]['supervisor']}"),
+              Text('filePath:  ${source[index]["filePath"]}')
+            ]),
+            leading: CircleAvatar(),
+          ),
+        ),
+        onTap: () async {
+          File f = File("helo");
+          var link = await projectController
+              .getDownloadLink(source[index]['filePath']);
+          var res = await projectController.httpFile(link);
+          print("$res in response");
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => View(
+                        file: res,
+                      )));
+        }),
+  );
 }
