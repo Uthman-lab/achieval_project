@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:achieval_project/controllers/file_picker.dart';
+import 'package:achieval_project/controllers/firebase_controller.dart';
 import 'package:achieval_project/controllers/project_controller.dart';
 import 'package:achieval_project/widgets/buttons.dart';
 import 'package:achieval_project/widgets/spaces.dart';
@@ -16,6 +17,7 @@ class AddView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var projectObj = Provider.of<ProjectController>(context);
+    var firebaseObj = Provider.of<FirebaseProvider>(context);
     TextEditingController titleController = TextEditingController();
     TextEditingController supervisorController = TextEditingController();
     TextEditingController authorController = TextEditingController();
@@ -39,7 +41,7 @@ class AddView extends StatelessWidget {
             MyTextButton(
               label: "save",
               onpressed: () async {
-                final path = await projectObj.uploadFile(
+                final path = await firebaseObj.uploadFile(
                     projectObj.file, authorController.text);
                 var obj = Project(
                     title: titleController.text,
@@ -47,7 +49,8 @@ class AddView extends StatelessWidget {
                     supervisor: supervisorController.text,
                     date: projectObj.date,
                     filePath: path);
-                projectObj.addToFirebase(obj);
+                firebaseObj.addTitleToTitleCollection(titleController.text);
+                firebaseObj.addToFirebase(obj);
                 Projects.projects.add(obj);
                 Projects.projects.forEach((element) {});
               },

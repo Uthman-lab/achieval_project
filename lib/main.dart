@@ -1,3 +1,4 @@
+import 'package:achieval_project/controllers/firebase_controller.dart';
 import 'package:achieval_project/controllers/verification.dart';
 import 'package:achieval_project/views/add_project.dart';
 import 'package:achieval_project/views/dashboad_view.dart';
@@ -26,7 +27,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<ProjectController>(
             create: (context) => ProjectController()),
         ChangeNotifierProvider<Verification>(
-            create: (context) => Verification())
+            create: (context) => Verification()),
+        ChangeNotifierProvider<FirebaseProvider>(
+            create: (context) => FirebaseProvider())
       ],
       child: Home(),
     );
@@ -39,6 +42,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "title",
       home: SignInView(),
     );
