@@ -22,13 +22,22 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
+    List title = widget.genre.toString().split("");
+    String firstLetter = title.removeAt(0);
+    firstLetter = firstLetter.toUpperCase();
+    String remainingWord = title.reduce((value, element) => "$value$element");
+    String displayTitle = firstLetter + remainingWord;
     List<Map<String, dynamic>> source = [];
     TextEditingController searchController = TextEditingController();
     var projectController = Provider.of<ProjectController>(context);
     var firebaseObj = Provider.of<FirebaseProvider>(context);
     //    projectController.docs = [];
     return Scaffold(
-      appBar: AppBar(title: Text("Search For Projects ")),
+      appBar: AppBar(
+          title: Text(
+        "Search For Projects by $displayTitle",
+        style: TextStyle(fontSize: 14),
+      )),
       body: Container(
         child: Column(
           children: [
