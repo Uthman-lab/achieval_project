@@ -12,7 +12,8 @@ import '../controllers/project_controller.dart';
 import '../models/project_work_model.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({Key? key}) : super(key: key);
+  final genre;
+  const SearchView({Key? key, required this.genre}) : super(key: key);
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -21,13 +22,11 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
-    String a = File("").toString();
-
-    List<Map> source = [];
+    List<Map<String, dynamic>> source = [];
     TextEditingController searchController = TextEditingController();
     var projectController = Provider.of<ProjectController>(context);
     var firebaseObj = Provider.of<FirebaseProvider>(context);
-    // projectController.docs = [];
+    //    projectController.docs = [];
     return Scaffold(
       appBar: AppBar(title: Text("Search For Projects ")),
       body: Container(
@@ -39,22 +38,16 @@ class _SearchViewState extends State<SearchView> {
               suffix: GestureDetector(
                 child: Icon(Icons.search),
                 onTap: () async {
-                  Stream<List<Map>> a = firebaseObj.readProjects();
-                  a.listen((event) {
-                    projectController.searchList = event
-                      ..retainWhere((element) =>
-                          element.containsValue(searchController.text));
-                    print(projectController.searchList);
-
-                    // print(projectController.searchList);
+                  var a = await firebaseObj.searchByField(
+                      genre: widget.genre, searchText: searchController.text);
+                  setState(() {
+                    projectController.searchList = a;
                   });
                 },
               ),
             ),
             Expanded(
               child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
                 children: cards(projectController.searchList, context),
               ),
             )
@@ -65,7 +58,7 @@ class _SearchViewState extends State<SearchView> {
   }
 }
 
-List<Widget> cards(List<Map> source, context) {
+List<Widget> cards(List<Map<String, dynamic>> source, context) {
   var firebaseObj = Provider.of<FirebaseProvider>(context);
   return List.generate(
     source.length,
@@ -86,7 +79,7 @@ List<Widget> cards(List<Map> source, context) {
                     Text("Supervisor : ${source[index]['supervisor']}"),
                   ]),
               leading: CircleAvatar(),
-              trailing: GestureDetector(child: OpenPdfButton()),
+              trailing: GestureDetector(child: Text('')),
             ),
           ),
           onTap: () async {
@@ -105,39 +98,4 @@ List<Widget> cards(List<Map> source, context) {
           });
     },
   );
-}
-
-class OpenPdfButton extends StatefulWidget {
-  const OpenPdfButton({Key? key}) : super(key: key);
-
-  @override
-  State<OpenPdfButton> createState() => _OpenPdfButtonState();
-}
-
-class _OpenPdfButtonState extends State<OpenPdfButton> {
-  bool isIcon = false;
-  void setIcon() {
-    Timer.periodic(Duration(seconds: 100), (timer) {
-      setState(() {
-        isIcon = !isIcon;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    setIcon();
-    return isIcon
-        ? Container(
-            child: Text(
-            "open Pdf",
-            softWrap: true,
-          ))
-        : Container(
-            color: Colors.blue[500],
-            child: Text(
-              "open Pdf",
-              softWrap: true,
-            ));
-  }
 }

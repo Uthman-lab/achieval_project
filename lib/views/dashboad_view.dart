@@ -37,20 +37,58 @@ class MyDashBoad extends StatelessWidget {
         ],
         title: Text(" email's Dashboard"),
         bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
           child: Expanded(
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                SearchTile(label: "Search by Authur"),
+                SearchTile(
+                  label: "Search by Authur",
+                  onpress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchView(
+                                  genre: "author",
+                                )));
+                  },
+                ),
                 SearchTile(
                   label: "Search by Supervisor",
+                  onpress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchView(
+                                  genre: "supervisor",
+                                )));
+                  },
                 ),
-                SearchTile(label: "Search by Title"),
-                SearchTile(label: "Search by Year")
+                SearchTile(
+                  label: "Search by Title",
+                  onpress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchView(
+                                  genre: "title",
+                                )));
+                  },
+                ),
+                SearchTile(
+                  label: "Search by Year",
+                  onpress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchView(
+                                  genre: "year",
+                                )));
+                  },
+                )
               ],
             ),
           ),
-          preferredSize: Size.fromHeight(50),
         ),
       ),
       body: MyGridView(),
@@ -70,6 +108,7 @@ class SearchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onpress,
       child: Container(
           margin: EdgeInsets.all(8),
           padding: EdgeInsets.all(5),
@@ -78,12 +117,6 @@ class SearchTile extends StatelessWidget {
             color: Colors.white,
           ),
           child: Text(label)),
-      onTap: onpress ??
-          () {
-            print("object");
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SearchView()));
-          },
     );
   }
 }

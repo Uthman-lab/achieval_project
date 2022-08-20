@@ -14,7 +14,12 @@ class MyTextFormField extends StatelessWidget {
 }
 
 class MyTextField extends StatelessWidget {
-  const MyTextField({Key? key, required this.controller, required this.label})
+  final password;
+  const MyTextField(
+      {Key? key,
+      this.password = false,
+      required this.controller,
+      required this.label})
       : super(key: key);
   final TextEditingController controller;
   final String label;
@@ -22,6 +27,7 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      obscureText: password,
       controller: controller,
       decoration: InputDecoration(label: Text(label)),
     );

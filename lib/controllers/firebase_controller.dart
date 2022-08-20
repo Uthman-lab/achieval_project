@@ -13,18 +13,25 @@ class FirebaseProvider extends ChangeNotifier {
         .collection("project")
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
-    //print(projects);
 
     return projects;
   }
 
-  // Stream<List<Map<String,String>>> getProjectsbyTitle(){
-  //   var projects = FirebaseFirestore.instance.collection('project').snapshots().listen((event) {
-  //     event.docs.where((element) {
-  //       element.data().map((key, value)=> key == 'title')
-  //     })
-  //   })
-  // }
+  Future<List<Map<String, dynamic>>> searchByField({genre, searchText}) async {
+    List<Map<String, dynamic>> returnList = [];
+    var projects = FirebaseFirestore.instance
+        .collection("project")
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+
+    returnList = await projects.first;
+
+    returnList = returnList
+      ..retainWhere(
+          (element) => element[genre].toString().contains(searchText));
+
+    return returnList;
+  }
 
   Future uploadFile(File file, authorUpload) async {
     String destination = "files/${file.path.split("/").last}_$authorUpload";

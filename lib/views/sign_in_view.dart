@@ -11,10 +11,18 @@ import 'package:provider/provider.dart';
 
 import 'dashboad_view.dart';
 
-class SignInView extends StatelessWidget {
+class SignInView extends StatefulWidget {
   SignInView({Key? key}) : super(key: key);
+
+  @override
+  State<SignInView> createState() => _SignInViewState();
+}
+
+class _SignInViewState extends State<SignInView> {
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+  bool hidePassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +70,26 @@ class SignInView extends StatelessWidget {
                         label: "Enter Name",
                       ),
                       MySpace(10.0),
-                      MyTextField(
-                        controller: passwordController,
-                        label: "Enter Password",
+                      Row(
+                        children: [
+                          Expanded(
+                            child: MyTextField(
+                              password: hidePassword,
+                              controller: passwordController,
+                              label: "Enter Password",
+                            ),
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  hidePassword = !hidePassword;
+                                  print(hidePassword);
+                                });
+                              },
+                              child: hidePassword == false
+                                  ? Icon(Icons.visibility_rounded)
+                                  : Icon(Icons.visibility_off))
+                        ],
                       ),
                       MySpace(20.0),
                       MyElevatedButton(
@@ -74,8 +99,11 @@ class SignInView extends StatelessWidget {
                                 SnackBar(content: LinearProgressIndicator()));
                             verificationProvider.verify(
                                 context: context,
-                                email: emailController.text,
+                                email: emailController.text.trim(),
                                 password: passwordController.text);
+
+                            emailController.clear();
+                            passwordController.clear();
                           })
                     ],
                   ),

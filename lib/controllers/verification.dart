@@ -24,10 +24,36 @@ class Verification extends ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       String message = e.toString().split(']')[1].trim();
       bool isNetwork = message.contains("network");
+      bool badFormat = message.contains("badly formatted");
+      bool empty = message.contains("is empty");
+      int errorCode;
+      String displayMessage;
+      if (isNetwork) {
+        errorCode = 1;
+      } else if (badFormat) {
+        errorCode = 2;
+      } else if (empty) {
+        errorCode = 3;
+      } else {
+        errorCode = 0;
+      }
 
-      String networkError = "check your network connection and try again";
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${isNetwork ? networkError : message}')));
+      switch (errorCode) {
+        case 1:
+          displayMessage = "check your network connection and try again";
+          break;
+        case 2:
+          displayMessage = "Email is incorrect";
+          break;
+        case 3:
+          displayMessage = "please Enter an email and password";
+          break;
+        default:
+          displayMessage = message;
+      }
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(displayMessage)));
       print(e);
     }
   }

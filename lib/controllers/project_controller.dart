@@ -9,16 +9,18 @@ class ProjectController extends ChangeNotifier {
   late DateTime _date = DateTime.now();
   File? _file;
   List<Map> _docs = [];
-  List<Map> _searchList = [];
+  List<Map<String, dynamic>>? _searchList;
 
   List<Map> get docs => _docs;
-  List<Map> get searchList => _searchList;
+  List<Map<String, dynamic>> get searchList =>
+      _searchList ?? List<Map<String, dynamic>>.filled(0, {});
+
   set docs(List<Map> newDocs) {
     _docs = newDocs;
     notifyListeners();
   }
 
-  set searchList(List<Map> newList) {
+  set searchList(List<Map<String, dynamic>> newList) {
     _searchList = newList;
     notifyListeners();
   }
