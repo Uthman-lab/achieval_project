@@ -9,6 +9,7 @@ import '../models/project_work_model.dart';
 
 class FirebaseProvider extends ChangeNotifier {
   Stream<List<Map<String, dynamic>>> readProjects() {
+    print("hello___");
     var projects = FirebaseFirestore.instance
         .collection("project")
         .snapshots()
@@ -19,18 +20,21 @@ class FirebaseProvider extends ChangeNotifier {
 
   Future<List<Map<String, dynamic>>> searchByField({genre, searchText}) async {
     List<Map<String, dynamic>> returnList = [];
-    var projects = FirebaseFirestore.instance
-        .collection("project")
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
 
-    returnList = await projects.first;
+    try {
+      var projects = await FirebaseFirestore.instance
+          .collection("project")
+          .where(genre, arrayContains: searchText)
+          .snapshots()
+          .first;
 
-    returnList = returnList
-      ..retainWhere(
-          (element) => element[genre].toString().contains(searchText));
-
-    return returnList;
+      List<Map<String, dynamic>> a =
+          projects.docs.map((e) => e.data()).toList();
+      return a;
+    } catch (e) {
+      print(e);
+    }
+    return [];
   }
 
   Future uploadFile(File file, authorUpload) async {
@@ -70,13 +74,10 @@ class FirebaseProvider extends ChangeNotifier {
   }
 
   void addToFirebase(Project project) async {
-    await FirebaseFirestore.instance.collection("project").doc().set({
-      "title": project.title,
-      "author": project.author,
-      "supervisor": project.supervisor,
-      "date": project.date,
-      "filePath": project.filePath
-    });
+    await FirebaseFirestore.instance
+        .collection("project")
+        .doc()
+        .set(project.toJson());
   }
 
   void addTitleToTitleCollection(title) async {

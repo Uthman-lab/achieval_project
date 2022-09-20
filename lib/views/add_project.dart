@@ -43,7 +43,11 @@ class AddView extends StatelessWidget {
               onpressed: () async {
                 final path = await firebaseObj.uploadFile(
                     projectObj.file, authorController.text);
+                var index = projectObj.indexedField;
                 var obj = Project(
+                    indexedAuthor: index(authorController.text),
+                    indexedSupervisor: index(supervisorController.text),
+                    indexedTitle: index(titleController.text),
                     title: titleController.text,
                     author: authorController.text,
                     supervisor: supervisorController.text,

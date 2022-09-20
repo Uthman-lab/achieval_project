@@ -16,9 +16,6 @@ class Verification extends ChangeNotifier {
     try {
       var methods = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      _uid = methods.user!.uid;
-      _email = methods.user!.email;
-
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => MyDashBoad()));
     } on FirebaseAuthException catch (e) {

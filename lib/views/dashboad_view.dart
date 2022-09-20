@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/gridview.dart';
+import '../widgets/search_view.dart';
+
 class MyDashBoad extends StatelessWidget {
   const MyDashBoad({Key? key}) : super(key: key);
 
@@ -41,51 +44,24 @@ class MyDashBoad extends StatelessWidget {
           child: Expanded(
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: [
+              children: const [
                 SearchTile(
                   label: "Search by Authur",
-                  onpress: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SearchView(
-                                  genre: "author",
-                                )));
-                  },
+                  screen: SearchView(genre: "indexedAuthor"),
                 ),
                 SearchTile(
                   label: "Search by Supervisor",
-                  onpress: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SearchView(
-                                  genre: "supervisor",
-                                )));
-                  },
+                  screen: SearchView(genre: "indexedSupervisor"),
                 ),
                 SearchTile(
                   label: "Search by Title",
-                  onpress: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchView(
-                                  genre: "title",
-                                )));
-                  },
+                  screen: SearchView(genre: "indexedTitle"),
                 ),
                 SearchTile(
-                  label: "Search by Year",
-                  onpress: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchView(
-                                  genre: "year",
-                                )));
-                  },
-                )
+                    label: "Search by Year",
+                    screen: SearchView(
+                      genre: "year",
+                    ))
               ],
             ),
           ),
@@ -93,113 +69,5 @@ class MyDashBoad extends StatelessWidget {
       ),
       body: MyGridView(),
     );
-  }
-}
-
-class SearchTile extends StatelessWidget {
-  final label;
-  final onpress;
-  const SearchTile({
-    this.onpress,
-    required this.label,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onpress,
-      child: Container(
-          margin: EdgeInsets.all(8),
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-          ),
-          child: Text(label)),
-    );
-  }
-}
-
-class MyGridView extends StatefulWidget {
-  const MyGridView({Key? key}) : super(key: key);
-
-  @override
-  State<MyGridView> createState() => _MyGridViewState();
-}
-
-class _MyGridViewState extends State<MyGridView> {
-  var data;
-
-  void set() async {
-    var provider = Provider.of<FirebaseProvider>(context);
-    data = await provider.getAllTitles();
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // set();
-    var provider = Provider.of<FirebaseProvider>(context);
-    return FutureBuilder(
-        future: provider.getAllTitles(),
-        builder:
-            ((context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              return GridView(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  children: cards(snapshot.data!));
-            }
-          }
-          return ListView(
-            children: [LinearProgressIndicator(), RefreshProgressIndicator()],
-          );
-        }));
-    // return StreamBuilder(
-    //     stream: data,
-    //     builder:
-    //         ((context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-    //       if (snapshot.connectionState == ConnectionState.done) {
-    //         if (snapshot.hasData) {
-    //
-    //         }
-    //       } else if (snapshot.connectionState == ConnectionState.active) {
-    //         if (snapshot.hasData) {
-    //           return GridView(
-    //             shrinkWrap: true,
-    //             physics: NeverScrollableScrollPhysics(),
-    //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //                 crossAxisCount: 2),
-    //             children: cards(snapshot.data!),
-    //           );
-    //         }
-    //       }
-    //       print(snapshot.connectionState);
-    //       print(snapshot.hasData);
-    //       return Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }));
-  }
-
-  List<Widget> cards(List<Map<String, dynamic>> list) {
-    return List.generate(list.length, (index) {
-      return Card(
-        color: Theme.of(context).cardTheme.copyWith(color: Colors.green).color,
-        child: Center(
-            child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Text('title ${list[index]["title"]}',
-              softWrap: true, style: Theme.of(context).textTheme.headlineSmall),
-        )),
-      );
-    });
   }
 }

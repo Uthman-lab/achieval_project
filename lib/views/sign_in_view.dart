@@ -86,7 +86,7 @@ class _SignInViewState extends State<SignInView> {
                                   print(hidePassword);
                                 });
                               },
-                              child: hidePassword == false
+                              child: hidePassword == true
                                   ? Icon(Icons.visibility_rounded)
                                   : Icon(Icons.visibility_off))
                         ],

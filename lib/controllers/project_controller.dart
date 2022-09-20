@@ -51,4 +51,23 @@ class ProjectController extends ChangeNotifier {
   set file(newFile) {
     _file = newFile;
   }
+
+  List<String> indexedField(String string) {
+    List<String> result = [];
+    String countWord = "";
+
+    List<String> list = string.split("");
+    list.forEach((letter) {
+      if (letter != " ") {
+        countWord += letter;
+        result.add(countWord);
+      } else {
+        countWord = "";
+        countWord += letter.trim();
+        countWord.isEmpty ? null : result.add(countWord);
+      }
+    });
+
+    return result;
+  }
 }
